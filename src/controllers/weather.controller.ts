@@ -1,21 +1,23 @@
 import { Controller, Get, Param } from '@nestjs/common';
+import { Weather } from 'src/schemas/weather.schema';
+import { WeatherService } from 'src/services/weather.service';
 
 @Controller('weather') 
 export class WeatherController {
+  constructor(private weatherService: WeatherService) {}
 
-
-  @Get(':city')
-  getWeather(@Param('city') city: string) {
-    return city
+  @Get('temperature/:city')
+  getWeather(@Param('city') city: string): Promise<Weather> {
+    return this.weatherService.getWeather(city)
   }
 
-  @Get(':city/forecast')
+  @Get('temperature/:city/forecast')
   getForecast(@Param('city') city: string) {
-    return city
+    return this.weatherService.getForecast(city)
   }
 
-  @Get('history')
+  @Get('history')  
   getWeatherHistory() {
-    return 'history'
+    return this.weatherService.getHistory()
   }
 }
